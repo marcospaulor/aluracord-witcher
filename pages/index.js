@@ -3,8 +3,6 @@ import { useRouter } from 'next/router';
 import appConfig from '../config.json';
 import { Box, Button, Text, TextField, Image } from '@skynexui/components';
 import Title from '../components/Title';
-import avatarImage from '../public/static/image/none-user.jpg';
-import backgourdImage from '../public/static/image/witcher-background.gif';
 
 export default function Main(){
     // Utilizado para mudar de páginas
@@ -24,7 +22,7 @@ export default function Main(){
                 styleSheet={{
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     backgroundColor: appConfig.theme.colors.primary["500"],
-                    backgroundImage: `url(${backgourdImage})`,
+                    backgroundImage: 'url(https://i0.wp.com/windowscustomization.com/wp-content/uploads/2019/01/The-Witcher-3-Wild-Hunt.gif?fit=750%2C354&quality=80&strip=all&ssl=1)',
                     backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundBlendMode: 'multiply',
                 }}
             >
@@ -120,7 +118,7 @@ export default function Main(){
                         borderRadius: '50%',
                         marginBottom: '16px',
                     }}
-                    src={JSON.stringify(userData) == "{}" ? avatarImage : userData.avatar_url}
+                    src={JSON.stringify(userData) == "{}" ? 'https://scontent.fgyn11-1.fna.fbcdn.net/v/t1.18169-9/18581991_110955446153902_5795519808786089720_n.jpg?_nc_cat=100&ccb=1-5&_nc_sid=09cbfe&_nc_eui2=AeG-GNkSHF1EE49fjZCApDJW9RQEtJWl6Gj1FAS0laXoaMPAZa9XdWoQDOa6o5yo1fm-uWxkACkaZJNOUZ-FozN2&_nc_ohc=lbVymedk62sAX9JGjip&_nc_ht=scontent.fgyn11-1.fna&oh=00_AT8vRdk4rLzwg2SWoIQzRmUJ6X_i5OJgZ2x70Zwxg34-ww&oe=6217D3E0' : userData.avatar_url}
                     // `https://github.com/${userData.login}.png`
                     />
                     <Text
