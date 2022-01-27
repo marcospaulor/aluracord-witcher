@@ -3,12 +3,19 @@ import { useRouter } from 'next/router';
 import appConfig from '../config.json';
 import { Box, Button, Text, TextField, Image } from '@skynexui/components';
 import Title from '../components/Title';
+import avatarImage from '../public/static/image/useravatar.png';
 
 export default function Main(){
     // Utilizado para mudar de páginas
     const route = useRouter();
     // const username = 'marcospaulor'
-    const [username, setUsername] = useState('');
+    const [userData, setUserData] = useState({});
+    // Consulta a API do Github para obter os dados do usuário
+    const getUser = async (username) =>{
+        const res = await fetch(`https://api.github.com/users/${username}`);
+        const data = await res.json();
+        return setUserData(data);
+    }
 
     return(
         <>
@@ -68,8 +75,12 @@ export default function Main(){
                         onChange={function (event){
                             // Guarda o valor do Campo de Texto a cada modificação
                             const value = event.target.value;
-                            // Chamada da função setUsername, alterando o valor do username
-                            setUsername(value);
+                            // Chamada da função getUser, pesquisando o usuário digitado
+                            if(value.length > 0){
+                                value.length < 3 ? setUserData({}) : getUser(value);
+                            } else {
+                                null;
+                            }    
                         }}
                     />
                     <Button
@@ -108,20 +119,52 @@ export default function Main(){
                         borderRadius: '50%',
                         marginBottom: '16px',
                     }}
-                    src={`https://github.com/${username}.png`}
+                    src={JSON.stringify(userData) == "{}" ? 'https://scontent.fgyn11-1.fna.fbcdn.net/v/t1.18169-9/18581991_110955446153902_5795519808786089720_n.jpg?_nc_cat=100&ccb=1-5&_nc_sid=09cbfe&_nc_eui2=AeG-GNkSHF1EE49fjZCApDJW9RQEtJWl6Gj1FAS0laXoaMPAZa9XdWoQDOa6o5yo1fm-uWxkACkaZJNOUZ-FozN2&_nc_ohc=lbVymedk62sAX9JGjip&_nc_ht=scontent.fgyn11-1.fna&oh=00_AT8vRdk4rLzwg2SWoIQzRmUJ6X_i5OJgZ2x70Zwxg34-ww&oe=6217D3E0' : userData.avatar_url}
+                    // `https://github.com/${userData.login}.png`
                     />
                     <Text
-                    variant="body4"
-                    styleSheet={{
-                        color: appConfig.theme.colors.neutrals["200"],
-                        backgroundColor: appConfig.theme.colors.neutrals["900"],
-                        padding: '3px 10px',
-                        borderRadius: '1000px',
-                        fontSize: '18px',
-                    }}
+                        variant="body4"
+                        styleSheet={{
+                            color: appConfig.theme.colors.neutrals["200"],
+                            backgroundColor: appConfig.theme.colors.neutrals["900"],
+                            padding: '3px 10px',
+                            borderRadius: '1000px',
+                            fontSize: '20px',
+                        }}
                     >
-                    @{username}
+                    @{JSON.stringify(userData) == "{}" ? 'Geralt' : userData.login}
                     </Text>
+                    <Box
+                        styleSheet={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            flexDirection: 'column',
+                            marginTop: '8px',
+                        }}
+                    >
+                        <Text
+                            variant="body4"
+                            styleSheet={{
+                                color: appConfig.theme.colors.neutrals["200"],
+                                backgroundColor: appConfig.theme.colors.neutrals["900"],
+                                padding: '3px 10px',
+                                borderRadius: '1000px',
+                                fontSize: '1rem',
+                                marginBottom: '8px',
+                            }}
+                        >Followers:{JSON.stringify(userData) == "{}" ? '9999' : userData.followers}</Text>
+                        <Text 
+                            variant="body4"
+                            styleSheet={{
+                                color: appConfig.theme.colors.neutrals["200"],
+                                backgroundColor: appConfig.theme.colors.neutrals["900"],
+                                padding: '3px 10px',
+                                borderRadius: '1000px',
+                                fontSize: '1rem',
+                            }}
+                        >Following: {JSON.stringify(userData) == "{}" ? '9999' : userData.following}</Text>
+                    </Box>
                 </Box>
                 {/* Photo Area */}
                 </Box>
