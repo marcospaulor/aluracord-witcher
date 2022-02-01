@@ -32,8 +32,8 @@ export default function Main(){
                         alignItems: 'center',
                         justifyContent: 'space-between',
                         flexDirection: {
-                        xs: 'column',
-                        sm: 'row',
+                            xs: 'column',
+                            sm: 'row',
                         },
                         width: '100%', maxWidth: '700px',
                         borderRadius: '5px', padding: '32px', margin: '16px',
@@ -48,8 +48,11 @@ export default function Main(){
                     onSubmit={function (event){
                         // Retira o load da página
                         event.preventDefault();
-                        // Direciona para outra página
-                        route.push('/chat');
+                        // Direciona para outra página passando o username
+                        route.push({
+                            pathname: '/chat',
+                            query: {username: userData.login}
+                        });
                     }}
                     styleSheet={{
                         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
@@ -71,7 +74,7 @@ export default function Main(){
                             backgroundColor: appConfig.theme.colors.neutrals["800"],
                             },
                         }}
-                        onChange={function (event){
+                        onChange={(event)=>{
                             // Guarda o valor do Campo de Texto a cada modificação
                             const value = event.target.value;
                             // Chamada da função getUser, pesquisando o usuário digitado
@@ -114,12 +117,12 @@ export default function Main(){
                     }}
                 >
                     <Image
-                    styleSheet={{
-                        borderRadius: '50%',
-                        marginBottom: '16px',
-                    }}
-                    src={JSON.stringify(userData) == "{}" ? 'https://scontent.fgyn11-1.fna.fbcdn.net/v/t1.18169-9/18581991_110955446153902_5795519808786089720_n.jpg?_nc_cat=100&ccb=1-5&_nc_sid=09cbfe&_nc_eui2=AeG-GNkSHF1EE49fjZCApDJW9RQEtJWl6Gj1FAS0laXoaMPAZa9XdWoQDOa6o5yo1fm-uWxkACkaZJNOUZ-FozN2&_nc_ohc=lbVymedk62sAX9JGjip&_nc_ht=scontent.fgyn11-1.fna&oh=00_AT8vRdk4rLzwg2SWoIQzRmUJ6X_i5OJgZ2x70Zwxg34-ww&oe=6217D3E0' : userData.avatar_url}
-                    // `https://github.com/${userData.login}.png`
+                        styleSheet={{
+                            borderRadius: '50%',
+                            marginBottom: '16px',
+                        }}
+                        src={JSON.stringify(userData) == "{}" ? 'https://scontent.fgyn11-1.fna.fbcdn.net/v/t1.18169-9/18581991_110955446153902_5795519808786089720_n.jpg?_nc_cat=100&ccb=1-5&_nc_sid=09cbfe&_nc_eui2=AeG-GNkSHF1EE49fjZCApDJW9RQEtJWl6Gj1FAS0laXoaMPAZa9XdWoQDOa6o5yo1fm-uWxkACkaZJNOUZ-FozN2&_nc_ohc=lbVymedk62sAX9JGjip&_nc_ht=scontent.fgyn11-1.fna&oh=00_AT8vRdk4rLzwg2SWoIQzRmUJ6X_i5OJgZ2x70Zwxg34-ww&oe=6217D3E0' : userData.avatar_url}
+                        // `https://github.com/${userData.login}.png`
                     />
                     <Text
                         variant="body4"
