@@ -63,6 +63,7 @@ export default function Main(){
                     <Text variant="body3" styleSheet={{ marginBottom: '32px', color: appConfig.theme.colors.neutrals["300"] }}>
                     {appConfig.name}
                     </Text>
+                    <Text variant='body4' styleSheet={{color: appConfig.theme.colors.neutrals["300"]}}>Digite seu nome de usuário do GitHub:</Text>
 
                     <TextField
                         fullWidth
