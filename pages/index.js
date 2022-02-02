@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import appConfig from '../config.json';
 import { Box, Button, Text, TextField, Image } from '@skynexui/components';
-import Title from '../components/Title';
+import Title from '../src/components/Title';
 
 export default function Main(){
     // Utilizado para mudar de páginas
@@ -14,6 +14,20 @@ export default function Main(){
         const res = await fetch(`https://api.github.com/users/${username}`);
         const data = await res.json();
         return setUserData(data);
+    }
+
+    // Veirifca se há usuário no textfield para redirecionar no submit
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        
+        if(JSON.stringify(userData) !== '{}'){
+            route.push({
+                pathname: '/chat',
+                query: {username: userData.login}
+            });
+        } else {
+            alert('Digite um usuário válido');
+        }
     }
 
     return(
@@ -46,13 +60,7 @@ export default function Main(){
                 <Box
                     as="form"
                     onSubmit={function (event){
-                        // Retira o load da página
-                        event.preventDefault();
-                        // Direciona para outra página passando o username
-                        route.push({
-                            pathname: '/chat',
-                            query: {username: userData.login}
-                        });
+                        handleSubmit(event);
                     }}
                     styleSheet={{
                         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
@@ -79,11 +87,9 @@ export default function Main(){
                             // Guarda o valor do Campo de Texto a cada modificação
                             const value = event.target.value;
                             // Chamada da função getUser, pesquisando o usuário digitado
-                            if(value.length > 0){
-                                value.length < 3 ? setUserData({}) : getUser(value);
-                            } else {
-                                null;
-                            }    
+                            if(value.length >= 4){
+                                getUser(value);
+                            }  
                         }}
                     />
                     <Button

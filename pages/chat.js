@@ -1,39 +1,66 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { supabase } from '../src/api/api'; // api.js
 import { Box, Button, TextField } from '@skynexui/components';
 import appConfig from '../config.json'
-import Header from '../components/Header';
-import MessageList from '../components/MessageList';
+import Header from '../src/components/Header';
+import MessageList from '../src/components/MessageList';
+import { ButtonSendSticker } from '../src/components/ButtonSendSticker';
+
+function dataBaseListener(setNewMessage){
+    return supabase
+        .from('messages')
+        .on('INSERT', (liveResponse) => {
+            setNewMessage(liveResponse.new);
+        })
+        .subscribe();
+}
+
 
 export default function ChatPage() {
-
-    const router = useRouter();
-    // Utiliza o router para obter o username
-    const {
-        query: { username },
-    } = router;
-    
     // Sua lógica vai aqui
     const [message, setMessage] = useState('');
     const [listMessages, setListMessages] = useState([]);
 
+    /** Encapsula a consulta no banco de dados, executando a função callback
+      somente quando houver uma mudança na lista de mensagens */
+    useEffect(() => {
+        supabase
+            .from('messages')
+            .select('*')
+            .order('id', {ascending: false})
+            .then(({data}) => setListMessages(data));
+
+            dataBaseListener((newMessage) => {
+                setListMessages((actualListValue) => {
+                    return [
+                        newMessage,
+                        ...actualListValue,
+                    ]
+                });
+            });
+
+    }, []);
+
+    const router = useRouter();
+    // Utiliza o router para obter o username
+    const { query: { username } } = router;
+    
+
     function handleNewMessage(newMessage){
         const message = {
-            id: listMessages.length + 1,
             from: username,
             text: newMessage,
         };
-        setListMessages([
-            message,
-            ...listMessages,
-        ]);
+
+        supabase
+            .from('messages')
+            .insert([
+                message,
+            ])
+            .then()
         setMessage(''); // Limpa a mensagem
     }
-
-    // Mudar estado da lista de mensagens
-    // function setChanged(newMessage){
-    //     setListMessages(newMessage)
-    // }
 
     // Verfica se o campo está vazio
     function checkEmptyFieldAndSendMessage(newMessage){
@@ -119,6 +146,11 @@ export default function ChatPage() {
                                 color: appConfig.theme.colors.neutrals[200],
                             }}
                         />
+
+                        <ButtonSendSticker onStickerClick = {(sticker) => {
+                            handleNewMessage(':sticker: ' + sticker);
+                        }} />
+
                         <Button 
                             buttonColors={{
                                 contrastColor: appConfig.theme.colors.neutrals["900"],

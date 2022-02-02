@@ -1,11 +1,20 @@
+import { supabase } from '../api/api'; // api.js
+import appConfig from '../../config.json'
 import { Box, Text, Image, Button } from "@skynexui/components";
-import appConfig from '../config.json'
 
 export default function MessageList({list , functionList}) {
 
     // Delete message from list and update the list
     const deleteMessage = (id) => {
-        functionList(list.filter(message => message.id !== id));
+        // functionList(list.filter(message => message.id !== id)); // Remove message from list sem BD
+        // Change to delete message from database
+        supabase
+            .from('messages')
+            .delete()
+            .eq('id', id)
+            .then(() => {
+                functionList(list.filter(message => message.id !== id));
+            })
     }
     
     return (
@@ -82,7 +91,14 @@ export default function MessageList({list , functionList}) {
                                 }}
                             />
                         </Box>
-                        {message.text}
+                        {/* Operador ternário para mostrar texto ou stickers */}
+                        {message.text.startsWith(':sticker:') 
+                            ? (
+                                <Image src={message.text.replace(':sticker:', '')} />
+                            )
+                            : (
+                                message.text
+                            )}
                     </Text>
                 );
             })}
