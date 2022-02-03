@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { supabase } from '../src/api/api'; // api.js
+// import { supabase } from '../src/api/api'; // api.js
+import { supabase } from '../src/lib/initSupabase';
 import { Box, Button, TextField } from '@skynexui/components';
 import appConfig from '../config.json'
 import Header from '../src/components/Header';

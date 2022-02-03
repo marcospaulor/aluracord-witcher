@@ -1,4 +1,5 @@
-import { supabase } from '../api/api'; // api.js
+// import { supabase } from '../api/api'; // api.js
+import { supabase } from '../lib/initSupabase';
 import appConfig from '../../config.json'
 import { Box, Text, Image, Button } from "@skynexui/components";
 
