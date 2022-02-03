@@ -7,6 +7,10 @@ import Header from '../src/components/Header';
 import MessageList from '../src/components/MessageList';
 import { ButtonSendSticker } from '../src/components/ButtonSendSticker';
 
+/** TODO: 
+ * Mario Souto: Mostrar o loading de mensagens (Tem que fazer o mais criativo ein!)
+ * Paulo Silveira: Fazer um efeito quando passar o mouse em cima (Use esse link como referência: https://pt-br.reactjs.org/docs/events.html#mouse-events) */
+
 function dataBaseListener(setNewMessage){
     return supabase
         .from('messages')
